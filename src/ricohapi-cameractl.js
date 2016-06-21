@@ -30,7 +30,7 @@ class CameraCtl extends EventEmitter {
    */
   connect(username, deviceID) {
     if (deviceID === undefined) throw new Error('parameter error');
-    if (!/^[%\.\w]+$/.test(deviceID)) throw new Error('parameter error');
+    if (!/^[A-Za-z0-9_]{1,32}$/.test(deviceID)) throw new Error('parameter error');
     if (this._client === undefined) throw new Error('state error: no client');
     this._deviceID = deviceID;
     return this._client.connect(username);
@@ -45,7 +45,7 @@ class CameraCtl extends EventEmitter {
     if (this._client === undefined) throw new Error('state error: need connect');
 
     this._client.on('msg', (topic, message) => {
-      const devid = topic.slice(topic.indexOf('/')+1);
+      const devid = topic.slice(topic.indexOf('/') + 1);
       const msg = msgpack.decode(message);
       this.emit(msg.c, devid, msg.p);
     });

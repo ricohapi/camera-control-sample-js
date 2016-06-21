@@ -2,7 +2,7 @@
 /*
  * Copyright (c) 2016 Ricoh Company, Ltd. All Rights Reserved.
  * See LICENSE for more information
-*/
+ */
 
 const AuthClient = require('../src/ricohapi-cameractl').AuthClient;
 const CameraCtl = require('../src/ricohapi-cameractl').CameraCtl;
@@ -31,4 +31,3 @@ ctl.connect(USER.userId, 'dev01')
   .then(() => ctl.disconnect())
   .then(() => console.log('finished'))
   .catch(e => console.log(e))
-

@@ -64,10 +64,11 @@ class MQTTClient extends EventEmitter {
       this._subscribeResolve = resolve;
       this._mqttClient.on('message',
         (toTopic, message) => {
-          const retTopic = toTopic.slice(toTopic.indexOf('/')+1);
+          const retTopic = toTopic.slice(toTopic.indexOf('/') + 1);
           return this.emit('msg', retTopic, message);
         });
-      this._mqttClient.subscribe(`${this._userID}/${topic}`);
+      this._subtopic = `${this._userID}/${topic}`;
+      this._mqttClient.subscribe(this._subtopic);
     });
   }
 
@@ -76,8 +77,16 @@ class MQTTClient extends EventEmitter {
    */
   unsubscribe() {
     if (!this._subscribeResolve) return;
-    this._subscribeResolve();
-    this._subscribeResolve = undefined;
+    if (this._subtopic) {
+      this._mqttClient.unsubscribe(this._subtopic, () => {
+        this._subscribeResolve();
+        this._subscribeResolve = undefined;
+      });
+      this._subtopic = undefined;
+    } else {
+      this._subscribeResolve();
+      this._subscribeResolve = undefined;
+    }
   }
 
   /**

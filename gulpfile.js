@@ -4,7 +4,7 @@ var gulp = require('gulp'),
   webpack = require('webpack-stream'),
   webpackConfig = require('./webpack.config.js');
 
-gulp.task('run', function () {
+gulp.task('server', function () {
     gulp.src('')
         .pipe(webserver({
             host: 'localhost',
